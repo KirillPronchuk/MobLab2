@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "422284778017",
+    "firebase_url": "https://laba2-daab3.firebaseio.com",
+    "project_id": "laba2-daab3",
+    "storage_bucket": "laba2-daab3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422284778017:android:080658381e70f632",
+        "android_client_info": {
+          "package_name": "com.example.kirill.lab2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422284778017-qeo9dh540pq45m26saml0rurqmm3ps5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kirill.lab2",
+            "certificate_hash": "610827AF2DA27608E3AF475BB91E7CFE27391A5E"
+          }
+        },
+        {
+          "client_id": "422284778017-d1ovkahrh4ut1dr21odgcous0gk2l3cb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZijKLsXAGtGLx7_2kNrQxkVWhtH-eeBI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422284778017-d1ovkahrh4ut1dr21odgcous0gk2l3cb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

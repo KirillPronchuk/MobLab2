@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Lab2</string>
+    <string name="action_logout">Log out</string>
+
+    <string name="hint_password">password</string>
+    <string name="hint_email">email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="menu_logout">Log out</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="allmeet">All meetings</string>
+    <string name="mymeet">My meetings</string>
+    <string name="nameString">Name</string>
+    <string name="descriptionString">Description</string>
+    <string name="startDateString">Start date</string>
+    <string name="endDateString">End date</string>
+    <string name="priorityString">Priority</string>
+    <string name="participantsString">Participants</string>
+    <string name="submitButtonText">Submit</string>
+    <string name="checkBoxString">Would be present</string>
+    <string name="signUpFirstNameString">First name</string>
+    <string name="signUpLastNameString">Last name</string>
+    <string name="signUpPositionString">Position</string>
+    <string name="signUpEmailString">Email</string>
+    <string name="signUpPasswordString">Password</string>
+</resources>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_meeting"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.kirill.lab2.NewMeetingActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/nameEdit"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/descrView" />
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/edtEventDateTimeStart"
+                android:layout_below="@+id/descrEdit"
+                android:layout_toEndOf="@+id/endDateView" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/descrEdit"
+                android:layout_below="@+id/nameEdit"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/startDateView" />
+
+            <TextView
+                android:text="@string/endDateString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/endDateView"
+                android:gravity="left|center"
+                android:layout_alignBottom="@+id/edtEventDateTimeEnd"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/edtEventDateTimeEnd"
+                android:layout_below="@+id/edtEventDateTimeStart" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:id="@+id/spinner"
+                android:layout_below="@+id/edtEventDateTimeEnd"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/endDateView"
+                android:layout_height="40dp" />
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:id="@+id/edtEventDateTimeEnd"
+                android:layout_below="@+id/edtEventDateTimeStart"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/priorityView" />
+
+            <TextView
+                android:text="@string/startDateString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/startDateView"
+                android:gravity="left|center"
+                android:layout_below="@+id/descrView"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/edtEventDateTimeStart"
+                android:layout_above="@+id/endDateView" />
+
+            <TextView
+                android:text="@string/descriptionString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/descrView"
+                android:gravity="left|center"
+                android:layout_below="@+id/nameEdit"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/edtEventDateTimeStart"
+                android:layout_toStartOf="@+id/edtEventDateTimeStart" />
+
+            <TextView
+                android:text="@string/nameString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameView"
+                android:gravity="left|center"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/descrView"
+                android:layout_toStartOf="@+id/nameEdit" />
+
+            <CheckBox
+                android:text="@string/checkBoxString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBox"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/spinner"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:text="@string/submitButtonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/submitButton"
+                android:layout_below="@+id/checkBox"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:text="@string/priorityString"
+                android:id="@+id/priorityView"
+                android:gravity="left|center"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/endDateView"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/checkBox"
+                android:layout_width="80dp" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+</RelativeLayout>
