@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.kirill.lab2.PostDetailActivity;
 import com.example.kirill.lab2.R;
 import com.example.kirill.lab2.model.Meeting;
+import com.example.kirill.lab2.model.User;
 import com.example.kirill.lab2.viewholder.PostViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,8 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 
 public abstract class PostListFragment extends Fragment {
@@ -106,6 +109,19 @@ public abstract class PostListFragment extends Fragment {
                                         Toast.makeText(getContext(), "Removing", Toast.LENGTH_SHORT).show();
                                         postRef.removeValue();
                                         mDatabase.child("user-meetings").child(getUid()).child(postKey).removeValue();
+                                        for (final Map.Entry<String,Boolean> entry: model.pres.entrySet()) {
+                                            mDatabase.child("users").child(entry.getKey()).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    mDatabase.child("user-meetings").child(entry.getKey()).child(postKey).removeValue();
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
                                     }
 
                                 })
