@@ -1,6 +1,8 @@
 package com.example.kirill.lab2;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +48,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private TextView mEndDate;
     private TextView mPriority;
     private TextView mParticipants;
+    Button smsButton;
+    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 
     private DatabaseReference mDatabase;
 
@@ -73,6 +77,17 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         mPriority = (TextView) findViewById(R.id.priority);
         mParticipants = (TextView) findViewById(R.id.participants);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("users");
+
+
+        smsButton = (Button)findViewById(R.id.smsButton);
+        sendIntent.setData(Uri.parse("sms:"));
+        smsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendIntent.putExtra("sms_body", mTitleView.getText() + "\n" + mBodyView.getText() + "\n" + mStartDate.getText() + "\n" + mEndDate.getText() + "\n" + mPriority.getText() + "\n" + mParticipants.getText());
+                startActivity(sendIntent);
+            }
+        });
 
     }
 

@@ -2,7 +2,9 @@ package com.example.kirill.lab2;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -27,14 +29,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NewMeetingActivity extends BaseActivity {
 
@@ -48,12 +61,31 @@ public class NewMeetingActivity extends BaseActivity {
     EditText descrEdit;
     Button submitButton;
     CheckBox checkbox;
+    Button smsButton;
+    final HashSet<String> recipients = new HashSet<>();
 
     private DatabaseReference mDatabase;
 
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
     private static final String DATE_ERROR = "Must be greater than start date";
+
+    private RequestBody getJsonMessage(String body){
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        StringBuilder strb = new StringBuilder();
+        String prefix = "";
+        final String json = "{\"notification\": {\"title\": \"news\",\"text\": \""+body+"\",\"click_action\": \"test\"},\"data\": {\"keyname\": \"any value\"}";
+        strb.append(json);
+        strb.append(" , \"registration_ids\" : [");
+        for (String recipient:
+             recipients) {
+            strb.append(prefix);
+            strb.append("\"").append(recipient).append("\"");
+            prefix = ",";
+        }
+        strb.append("]}");
+        return RequestBody.create(JSON,strb.toString());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +184,26 @@ public class NewMeetingActivity extends BaseActivity {
             }
         });
 
+        ValueEventListener tokenListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                DataSnapshot tokens = dataSnapshot.child("device_tokens");
+                Iterable<DataSnapshot> tokenIterator = dataSnapshot.getChildren();
+                for (DataSnapshot deviceToken : tokenIterator) {
+                    String c = deviceToken.getKey();
+                    recipients.add(c);
+                }
+//                recipients.add(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDatabase.child("device_tokens").addValueEventListener(tokenListener);
+
     }
 
 
@@ -218,7 +270,7 @@ public class NewMeetingActivity extends BaseActivity {
     }
 
     // [START write_fan_out]
-    private void createNewMeeting(String name, String desription, Date startDate, Date endDate, String priority, boolean present) {
+    private void createNewMeeting(final String name, String desription, Date startDate, Date endDate, String priority, boolean present) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("meetings").push().getKey();
@@ -230,6 +282,7 @@ public class NewMeetingActivity extends BaseActivity {
 
         final Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/meetings/" + key, postValues);
+        childUpdates.put("/device_tokens/" + FirebaseInstanceId.getInstance().getToken(), true);
 
 
         mDatabase.child("meetings").child(key).addListenerForSingleValueEvent(
@@ -238,6 +291,25 @@ public class NewMeetingActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         mDatabase.updateChildren(childUpdates);
                         setEditingEnabled(true);
+
+                        String keyFromConsole = "AAAAYlIiWiE:APA91bFYRb20ZgtP-VyDoG_AWt_76DzsiakBV8JNVpdhUbv-qFD4SC2yrWZIc6GBUUc8QKrrgN_93ATmWeJ4XggoBUma1F5fJZ9wpBoc4lPyD6MAmwfzY48_jqxbeJSFh9C5EF4Ug_o0";
+                        OkHttpClient client = new OkHttpClient();
+                        Request request = new Request.Builder()
+                                .url("https://fcm.googleapis.com/fcm/send")
+                                .addHeader("Authorization", "key=" + keyFromConsole)
+                                .addHeader("ContentType", "application/json")
+                                .post(getJsonMessage(name))
+                                .build();
+                        client.newCall(request).enqueue(new Callback() {
+
+                            @Override public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override public void onResponse(Call call, Response response) throws IOException {
+                                Log.d("Push response: ",response.body().string());
+                            }
+                        });
                         finish();
                     }
 

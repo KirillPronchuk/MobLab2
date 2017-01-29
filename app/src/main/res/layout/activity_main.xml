@@ -23,8 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        app:srcCompat="@android:drawable/ic_dialog_email"
-        android:layout_margin="16dp"/>
+        app:srcCompat="@drawable/ic_playlist_add"
+        android:layout_margin="16dp"
+        app:backgroundTint="@android:color/holo_orange_dark" />
 
 </RelativeLayout>
 

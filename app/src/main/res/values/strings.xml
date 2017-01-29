@@ -25,4 +25,7 @@
     <string name="signUpPositionString">Position</string>
     <string name="signUpEmailString">Email</string>
     <string name="signUpPasswordString">Password</string>
+    <string name="apply_string">apply</string>
+    <string name="cancel_string">cancel</string>
+    <string name="sms_string">Send SMS</string>
 </resources>
