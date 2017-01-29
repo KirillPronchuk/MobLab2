@@ -85,4 +85,16 @@ public class Meeting {
         return result;
     }
 
+    @Exclude
+    public Map<String, Object> toMapWithoutList() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("description", description);
+        result.put("startDate",startDate);
+        result.put("endDate",endDate);
+        result.put("priority", priority);
+        return result;
+    }
+
+
 }

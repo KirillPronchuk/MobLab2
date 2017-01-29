@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 
 public abstract class PostListFragment extends Fragment {
@@ -41,6 +42,7 @@ public abstract class PostListFragment extends Fragment {
     private FirebaseRecyclerAdapter<Meeting, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
+    protected boolean marker = false;
 
     public PostListFragment() {}
 
@@ -80,6 +82,7 @@ public abstract class PostListFragment extends Fragment {
 
                 // Set click listener for the whole post view
                 final String postKey = postRef.getKey();
+                if(marker) {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -89,7 +92,6 @@ public abstract class PostListFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-
                 viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
@@ -103,6 +105,7 @@ public abstract class PostListFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         Toast.makeText(getContext(), "Removing", Toast.LENGTH_SHORT).show();
                                         postRef.removeValue();
+                                        mDatabase.child("user-meetings").child(getUid()).child(postKey).removeValue();
                                     }
 
                                 })
@@ -111,23 +114,24 @@ public abstract class PostListFragment extends Fragment {
                         return true;
                     }
                 });
-
-                // Determine if the current user has liked this post and set UI accordingly
-                if (model.pres.containsKey(getUid())) {
-                    viewHolder.starView.setImageResource(R.drawable.ic_add_box);
-                } else {
-                    viewHolder.starView.setImageResource(R.drawable.ic_indeterminate_check_box);
-                }
-
-                viewHolder.bindToPost(model, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View starView) {
-                        // Need to write to both places the post is stored
-                        DatabaseReference globalPostRef = mDatabase.child("meetings").child(postRef.getKey());
-                        // Run two transactions
-                        onStarClicked(globalPostRef);
+//                if(marker) {
+                    // Determine if the current user has liked this post and set UI accordingly
+                    if (model.pres.containsKey(getUid())) {
+                        viewHolder.starView.setImageResource(R.drawable.ic_add_box);
+                    } else {
+                        viewHolder.starView.setImageResource(R.drawable.ic_indeterminate_check_box);
                     }
-                });
+
+                }
+                    viewHolder.bindToPost(model, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View starView) {
+                            // Need to write to both places the post is stored
+                            DatabaseReference globalPostRef = mDatabase.child("meetings").child(postRef.getKey());
+                            // Run two transactions
+                            onStarClicked(globalPostRef, postKey, model);
+                        }
+                    });
 
             }
         };
@@ -137,7 +141,7 @@ public abstract class PostListFragment extends Fragment {
 
 
 
-    private void onStarClicked(DatabaseReference postRef) {
+    private void onStarClicked(DatabaseReference postRef, final String postKey, final Meeting model) {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
@@ -148,10 +152,13 @@ public abstract class PostListFragment extends Fragment {
 
                 if (p.pres.containsKey(getUid())) {
                     // Unstar the post and remove self from stars
+                    mDatabase.child("user-meetings").child(getUid()).child(postKey).removeValue();
                     p.pres.remove(getUid());
                 } else {
                     // Star the post and add self to stars
+                    mDatabase.child("user-meetings").child(getUid()).child(postKey).setValue(model);
                     p.pres.put(getUid(), true);
+
                 }
 
                 // Set value and report transaction success

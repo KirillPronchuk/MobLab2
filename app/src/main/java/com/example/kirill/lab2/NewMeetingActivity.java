@@ -283,7 +283,9 @@ public class NewMeetingActivity extends BaseActivity {
         final Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/meetings/" + key, postValues);
         childUpdates.put("/device_tokens/" + FirebaseInstanceId.getInstance().getToken(), true);
-
+        if(present){
+            childUpdates.put("/user-meetings/" + getUid() +"/"+ key,post.toMapWithoutList());
+        }
 
         mDatabase.child("meetings").child(key).addListenerForSingleValueEvent(
                 new ValueEventListener() {

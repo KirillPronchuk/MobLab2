@@ -5,7 +5,10 @@ import com.google.firebase.database.Query;
 
 public class RecentPostsFragment extends PostListFragment {
 
-    public RecentPostsFragment() {}
+    public RecentPostsFragment() {
+        super();
+        marker = true;
+    }
 
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
